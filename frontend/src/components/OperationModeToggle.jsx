@@ -36,8 +36,8 @@ const OperationModeToggle = ({ operationMode, setOperationMode, isProcessing }) 
             </div>
             <p className="description">
                 {isMove 
-                    ? "'Move' is faster on the same drive, But slower on 'external' drives." 
-                    : "'Copy' creates a duplicate of your files in the destination."}
+                    ? "'Move' is faster on the same drive, but slower on external drives. For external scan sources, prefer Copy."
+                    : "'Copy' creates a duplicate in the destination and is recommended for external scan drives."}
             </p>
         </div>
     );

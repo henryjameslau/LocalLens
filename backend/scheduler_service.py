@@ -9,30 +9,17 @@ The scheduler_daemon.py reads schedules.json and does the actual work.
 
 All timestamps are stored as UTC ISO-8601 strings.
 """
-import os
-import sys
 import json
 import uuid
 import logging
-from pathlib import Path
 from datetime import datetime, timezone, timedelta
 from typing import Dict, Optional, List
+from app_paths import get_app_data_dir
 
 logger = logging.getLogger(__name__)
 
 def _utcnow() -> str:
     return datetime.now(timezone.utc).isoformat()
-
-def get_app_data_dir() -> Path:
-    if sys.platform == 'win32':
-        appdata_env = os.getenv('APPDATA')
-        if not appdata_env:
-            raise RuntimeError("APPDATA environment variable is not set on Windows.")
-        app_data_path = Path(appdata_env) / 'LocalLens'
-    else:
-        app_data_path = Path.home() / '.config' / 'LocalLens'
-    app_data_path.mkdir(parents=True, exist_ok=True)
-    return app_data_path
 
 SCHEDULES_FILE = get_app_data_dir() / "schedules.json"
 

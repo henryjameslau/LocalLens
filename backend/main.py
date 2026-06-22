@@ -48,6 +48,7 @@ from asyncio import Queue, CancelledError # FIX: Import the asyncio Queue and Ca
 
 # --- Custom Exception Import ---
 from exceptions import OperationAbortedError
+from app_paths import get_app_data_dir
 
 # --- Path Configuration ---
 
@@ -64,19 +65,6 @@ else:
     # Path when running as a script (`python main.py`)
     application_path = os.path.dirname(os.path.abspath(__file__))
     FRONTEND_DIR = os.path.join(application_path, '..', 'frontend', 'dist')
-
-
-def get_app_data_dir():
-    """Gets the application data directory, creating it if it doesn't exist."""
-    if sys.platform == 'win32':
-        appdata_env = os.getenv('APPDATA')
-        if not appdata_env:
-            raise RuntimeError("APPDATA environment variable is not set on Windows.")
-        app_data_path = Path(appdata_env) / 'LocalLens'
-    else: # For macOS and Linux
-        app_data_path = Path.home() / '.config' / 'LocalLens'
-    app_data_path.mkdir(parents=True, exist_ok=True)
-    return app_data_path
 
 # --- Centralized paths for ALL user data ---
 APP_DATA_DIR = get_app_data_dir()
@@ -1677,10 +1665,7 @@ async def privacy_summary():
             return f"{size / (1024 * 1024):.2f} MB"
 
     # ── Config directory ──────────────────────────────────────────────────────
-    if sys.platform == "win32":
-        config_dir = str(_Path(os.environ.get("APPDATA", str(_Path.home()))) / "LocalLens")
-    else:
-        config_dir = str(_Path.home() / ".config" / "LocalLens")
+    config_dir = str(APP_DATA_DIR)
 
     db_path         = os.path.join(config_dir, "metadata_store.db")
     schedules_path  = os.path.join(config_dir, "schedules.json")

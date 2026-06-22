@@ -12,7 +12,7 @@ Design Principles:
   5. Self-optimizing — compaction, VACUUM, size cap
   6. Privacy-first — local only, user-deletable, paths purged on compaction
 
-File Location: ~/.config/LocalLens/metadata_store.db
+File Location: LocalLens app-data directory (platform-specific)
 Permissions:   0o600 (owner read/write only)
 """
 
@@ -25,6 +25,7 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+from app_paths import get_app_data_dir
 
 # ── Logger ──────────────────────────────────────────────────────────────────
 _log = logging.getLogger("locallens.metadata_store")
@@ -48,13 +49,7 @@ DB_FILENAME      = "metadata_store.db"
 
 def _get_config_dir() -> Path:
     """Return the OS-appropriate LocalLens config directory."""
-    if sys.platform == "win32":
-        base = Path(os.environ.get("APPDATA", Path.home()))
-    else:
-        base = Path.home() / ".config"
-    config_dir = base / "LocalLens"
-    config_dir.mkdir(parents=True, exist_ok=True)
-    return config_dir
+    return get_app_data_dir()
 
 
 def _get_db_path() -> Path:

@@ -49,6 +49,18 @@ const triple = getTargetTriple();
 const binaryName = `backend_server-${triple}${ext}`;
 const binaryPath = path.join('src-tauri', binaryName);
 
+// Tauri resource globs need at least one non-hidden file to match.
+const ensureBundlePlaceholder = () => {
+  const bundlePlaceholder = path.join('src-tauri', 'backend_server_bundle');
+  if (!fs.existsSync(bundlePlaceholder)) {
+    fs.mkdirSync(bundlePlaceholder, { recursive: true });
+  }
+  const placeholderFile = path.join(bundlePlaceholder, 'placeholder.txt');
+  if (!fs.existsSync(placeholderFile)) {
+    fs.writeFileSync(placeholderFile, 'Placeholder for Tauri resource glob.\n');
+  }
+};
+
 // On macOS, PyInstaller uses one-folder mode for faster startup
 // We copy the folder and create a wrapper script as the sidecar
 if (platform === 'darwin') {
@@ -109,6 +121,11 @@ exec "$BUNDLE_DIR/backend_server" "$@"
   } else {
     console.log(`[Dev Setup] Backend binary/wrapper exists at: ${binaryPath}`);
   }
+
+  // Ensure resources glob always has at least one match.
+  if (!fs.existsSync(targetFolderPath)) {
+    ensureBundlePlaceholder();
+  }
 } else {
   // Windows/Linux: Use single-file mode (simple copy)
   const builtBackendPath = path.join('..', 'backend', 'dist', `backend_server${ext}`);
@@ -136,7 +153,10 @@ exec "$BUNDLE_DIR/backend_server" "$@"
   if (!fs.existsSync(bundlePlaceholder)) {
     fs.mkdirSync(bundlePlaceholder, { recursive: true });
     // Create a placeholder file so glob matches something
-    fs.writeFileSync(path.join(bundlePlaceholder, '.gitkeep'), '# Placeholder for macOS one-folder bundle\n');
+    fs.writeFileSync(path.join(bundlePlaceholder, 'placeholder.txt'), 'Placeholder for macOS one-folder bundle\n');
     console.log(`[Dev Setup] Created placeholder folder: ${bundlePlaceholder}`);
   }
+
+  // Also ensure placeholder exists if folder already existed but was empty.
+  ensureBundlePlaceholder();
 }

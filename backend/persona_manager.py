@@ -310,7 +310,7 @@ class PersonaManager:
             "existing_answers": raw_answers,
             "privacy_note": (
                 "🔒 Your answers are stored only on your computer at "
-                "~/.config/LocalLens/metadata_store.db. "
+                f"{self._store._db_path}. "
                 "They never leave your machine (unless you opt into cloud AI)."
             ),
         }

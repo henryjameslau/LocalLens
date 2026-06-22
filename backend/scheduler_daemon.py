@@ -21,6 +21,7 @@ import logging
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
 from typing import Dict, List, Optional, Any
+from app_paths import get_app_data_dir
 
 try:
     from watchdog.observers import Observer
@@ -36,20 +37,6 @@ except ImportError:
 import urllib.request
 import urllib.error
 import urllib.parse
-
-# ---------------------------------------------------------------------------
-# Platform-independent paths
-# ---------------------------------------------------------------------------
-def get_app_data_dir() -> Path:
-    if sys.platform == 'win32':
-        base = os.getenv('APPDATA')
-        if not base:
-            raise RuntimeError("APPDATA not set")
-        p = Path(base) / 'LocalLens'
-    else:
-        p = Path.home() / '.config' / 'LocalLens'
-    p.mkdir(parents=True, exist_ok=True)
-    return p
 
 APP_DIR = get_app_data_dir()
 SCHEDULES_FILE = APP_DIR / "schedules.json"

@@ -33,6 +33,13 @@ brew install cmake dlib imagemagick
 > The `dlib` library cannot be built from source on newer macOS/Python combinations due to SDK changes.
 > Installing `dlib` via Homebrew first resolves this issue. The Python package will then link against the system library.
 
+> **Intel Mac (x86_64) note**:
+> Local Lens fully supports Intel Macs. Build and run from a native Intel terminal/session (not Rosetta) and keep your Rust toolchain on `x86_64-apple-darwin`.
+> ```bash
+> rustup target add x86_64-apple-darwin
+> rustup default stable-x86_64-apple-darwin
+> ```
+
 ##### Linux (Ubuntu/Debian)
 ```bash
 sudo apt update
@@ -219,7 +226,7 @@ node ensure-backend.js
 This script will:
 1. Find the built `backend_server` executable in `../backend/dist/`
 2. Copy it to `src-tauri/`
-3. Rename it to the correct target triple (e.g., `backend_server-x86_64-pc-windows-msvc.exe` or `backend_server-aarch64-apple-darwin`)
+3. Rename it to the correct target triple (e.g., `backend_server-x86_64-pc-windows-msvc.exe`, `backend_server-aarch64-apple-darwin`, or `backend_server-x86_64-apple-darwin`)
 
 > **Note:** If you skip this step, the Tauri build will fail because it won't find the sidecar executable.
 
@@ -268,6 +275,8 @@ frontend/src-tauri/target/release/bundle/
   - **Windows**: `%APPDATA%/LocalLens/`
   - **macOS**: `~/Library/Application Support/LocalLens/`
   - **Linux**: `~/.config/LocalLens/`
+
+  This local app-data directory stores indexing artifacts (metadata DB, face encodings, presets, schedules), so you can scan photos from an external drive while keeping indexing local on your machine.
 
 ### Common Build Issues
 

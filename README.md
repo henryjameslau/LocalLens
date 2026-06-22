@@ -229,6 +229,8 @@ brew install cmake dlib imagemagick
 ```
 
 > **Note for Apple Silicon (M1/M2/M3) Macs**: The `dlib` library must be installed via Homebrew first due to compatibility issues with newer Python versions. This is handled automatically when you follow the installation steps above.
+>
+> **Intel Mac (x86_64) note**: Local Lens supports Intel Macs natively. Use an Intel terminal/session and an `x86_64-apple-darwin` Rust toolchain when building from source.
 
 ##### Linux (Ubuntu/Debian)
 
@@ -322,5 +324,4 @@ This project is licensed under the GNU Affero General Public License v3.0 (AGPL-
 > 
 > Alternatively, you can scan this UPI ID: <br><br>
 > <img width="150" height="150" alt="image" src="https://github.com/user-attachments/assets/b21d0e47-254f-4402-a99f-46d8c9add1ad" />
-
 
